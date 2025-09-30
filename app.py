@@ -4,15 +4,21 @@ import pandas as pd
 # Atur layout ke full layar
 st.set_page_config(layout="wide")
 
-st.title("ADM PLAN Viewer - Demo")
+st.title("ADM PLAN Viewer")
 
-# Data contoh (dummy) supaya app bisa jalan tanpa file Excel
-data = {
-    "PO NO": ["Q4IC55HA", "Q4IC55HB", "Q4IC55HC"],
-    "PART NO": ["81110BZ610", "81150BZ111", "81550BZ190"],
-    "DELIVERY QUANTITY": [12, 8, 20],
-}
-df = pd.DataFrame(data)
+# Coba baca file Excel
+try:
+    # Ganti dengan nama file yang kamu upload di repo
+    file_path = "Master Picking List.xlsm"
 
-# Tampilkan tabel
-st.dataframe(df, use_container_width=True)
+    # Baca sheet "ADM PLAN"
+    df = pd.read_excel(file_path, sheet_name="ADM PLAN")
+
+    # Bersihkan baris/kolom kosong
+    df = df.dropna(axis=0, how="all").dropna(axis=1, how="all")
+
+    # Tampilkan tabel
+    st.dataframe(df, use_container_width=True)
+
+except FileNotFoundError:
+    st.error("⚠️ File 'Master Picking List.xlsm' belum ada di repository. Silakan upload dulu ke GitHub.")
